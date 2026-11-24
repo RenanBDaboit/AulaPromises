@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Last.fm | Music Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="appLastFm.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#"><span class="brand-mark">♫</span><span>sound<span class="brand-accent">scope</span></span></a>
+      <p class="side-label">BIBLIOTECA</p>
+      <a class="nav-link active" href="#overview">▦ <span>Visão geral</span></a>
+      <a class="nav-link" href="#artists">♬ <span>Artistas</span></a>
+      <a class="nav-link" href="#tracks">♫ <span>Faixas</span></a>
+      <a class="nav-link" href="#albums">▣ <span>Álbuns</span></a>
+      <a class="nav-link" href="#recent">◷ <span>Recentes</span></a>
+      <div class="sidebar-bottom">
+        <div class="api-status"><span class="status-dot"></span><span id="connectionStatus">Aguardando consulta</span></div>
+        <p>Dados fornecidos por Last.fm</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">SEU UNIVERSO MUSICAL</p>
+          <h1>Music dashboard<span class="pink">.</span></h1>
+        </div>
+        <div class="user-chip"><div class="avatar" id="userAvatar">♫</div><div><strong id="headerUsername">RenanDaboit</strong><small>Perfil Last.fm</small></div></div>
+      </header>
+
+      <section class="welcome-panel" id="overview">
+        <div class="welcome-copy">
+          <span class="pill">LAST.FM INSIGHTS</span>
+          <h2>Seus hábitos.<br><span>Seu som.</span></h2>
+          <p>Explore seus artistas, faixas e álbuns mais ouvidos em um só lugar.</p>
+          <div class="controls">
+            <label>Período
+              <select id="period">
+                <option value="overall">Todo o período</option>
+                <option value="12month">Últimos 12 meses</option>
+                <option value="6month">Últimos 6 meses</option>
+                <option value="3month">Últimos 3 meses</option>
+                <option value="1month">Último mês</option>
+                <option value="7day">Últimos 7 dias</option>
+              </select>
+            </label>
+            <label>Resultados
+              <select id="limit">
+                <option>10</option><option selected>20</option><option>50</option>
+              </select>
+            </label>
+            <button id="refreshButton" class="primary-button">Atualizar dados <span>↗</span></button>
+          </div>
+        </div>
+        <div class="sound-art" aria-hidden="true"><div class="disc"><div class="disc-center">♫</div></div><div class="equalizer"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat-card"><div class="stat-icon pink-bg">♫</div><span>ARTISTAS LISTADOS</span><strong id="artistCount">—</strong><small>no período selecionado</small></article>
+        <article class="stat-card"><div class="stat-icon purple-bg">◉</div><span>FAIXAS LISTADAS</span><strong id="trackCount">—</strong><small>no período selecionado</small></article>
+        <article class="stat-card"><div class="stat-icon blue-bg">▣</div><span>ÁLBUNS LISTADOS</span><strong id="albumCount">—</strong><small>no período selecionado</small></article>
+        <article class="stat-card"><div class="stat-icon orange-bg">◷</div><span>ÚLTIMA ATIVIDADE</span><strong class="stat-date" id="lastScrobble">—</strong><small>última faixa registrada</small></article>
+      </section>
+
+      <section class="content-section" id="artists">
+        <div class="section-heading"><div><p class="eyebrow">SEU TOP</p><h2>Artistas mais ouvidos</h2></div><span class="section-tag">01 / ARTISTS</span></div>
+        <div id="artistsGrid" class="artist-grid"><div class="loading-card">Carregue seus dados para ver os artistas.</div></div>
+      </section>
+
+      <section class="two-column">
+        <section class="content-section" id="tracks">
+          <div class="section-heading"><div><p class="eyebrow">EM REPEAT</p><h2>Faixas favoritas</h2></div><span class="section-tag">02 / TRACKS</span></div>
+          <div id="tracksList" class="ranking-list"><div class="empty-state">As faixas aparecerão aqui.</div></div>
+        </section>
+        <section class="content-section" id="albums">
+          <div class="section-heading"><div><p class="eyebrow">NA SUA COLEÇÃO</p><h2>Álbuns favoritos</h2></div><span class="section-tag">03 / ALBUMS</span></div>
+          <div id="albumsList" class="ranking-list"><div class="empty-state">Os álbuns aparecerão aqui.</div></div>
+        </section>
+      </section>
+
+      <section class="content-section" id="recent">
+        <div class="section-heading"><div><p class="eyebrow">ACABOU DE TOCAR</p><h2>Reproduções recentes</h2></div><span class="section-tag">04 / RECENT</span></div>
+        <div id="recentList" class="recent-list"><div class="empty-state">Suas reproduções recentes aparecerão aqui.</div></div>
+      </section>
+
+      <section class="content-section search-section" id="search">
+        <div class="section-heading"><div><p class="eyebrow">EXPLORE O LAST.FM</p><h2>Pesquisar música</h2></div><span class="section-tag">05 / DISCOVER</span></div>
+        <form id="searchForm" class="search-form">
+          <input id="searchInput" type="search" placeholder="Digite um artista ou uma faixa..." aria-label="Pesquisar artista ou faixa">
+          <select id="searchType" aria-label="Tipo de pesquisa"><option value="artist">Artista</option><option value="track">Faixa</option></select>
+          <button class="primary-button" type="submit">Pesquisar ↗</button>
+        </form>
+        <div id="searchResults" class="search-results"><p class="empty-state">Os resultados da pesquisa aparecerão aqui.</p></div>
+      </section>
+
+      <footer><span>sound<span class="pink">scope</span></span><span>Feito com a API do Last.fm · Seus dados musicais em um só lugar.</span></footer>
+    </main>
+  </div>
+</body>
+</html>
